@@ -887,27 +887,3 @@ async def on_ready():
     print("✅ Now Watching GUILTY GEAR STRIVE: DUAL RULERS")
 
 bot.run(TOKEN)
-
-# @bot.tree.command(name="shop", description="Buy items from the shop! 🛒")
-# async def shop(interaction: discord.Interaction):
-#     embed = discord.Embed(title="🛒 Shop", description="Use `/buy <item>` to purchase an item.", color=discord.Color.blurple())
-
-#     # Coin-based items
-#     embed.add_field(name="💰 Coin Shop", value="Spend your coins on cool items!", inline=False)
-#     embed.add_field(name="🎟️ Dailies", value="Cost: **1000 Coins**\nEarn 1 Daile daily.", inline=False)
-#     embed.add_field(name="🎲 Dice", value="Cost: **500 Coins**\nRoll a dice for a random reward.", inline=False)
-#     embed.add_field(name="🎫 Lottery Ticket", value="Cost: **100 Coins**\nEnter the lottery for a chance to win big!", inline=False)
-
-#     # Role Shop (Dailies-based)
-#     embed.add_field(name="🛡️ Role Shop", value="Use your **Dailies** to unlock special roles!", inline=False)
-#     embed.add_field(name="🟢 Green Role", value="Cost: **3 Dailies**", inline=True)
-#     embed.add_field(name="🔵 Blue Role", value="Cost: **5 Dailies**", inline=True)
-#     embed.add_field(name="🔴 Red Role", value="Cost: **7 Dailies**", inline=True)
-
-#     # Color Purchases (Coin-based)
-#     embed.add_field(name="🎨 Color Shop", value="Use coins to change your name color!", inline=False)
-#     embed.add_field(name="🟡 Yellow Name", value="Cost: **1000 Coins**", inline=True)
-#     embed.add_field(name="🟣 Purple Name", value="Cost: **2000 Coins**", inline=True)
-#     embed.add_field(name="⚫ Black Name", value="Cost: **5000 Coins**", inline=True)
-
-#     await interaction.response.send_message(embed=embed, ephemeral=True)
