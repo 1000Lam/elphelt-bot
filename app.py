@@ -700,7 +700,7 @@ async def stocks_slash(interaction: discord.Interaction):
 
     embed = discord.Embed(
         title="📈 **Stock Market** 📉", 
-        description="Here are the current stock prices. Prices change every 3 minute.",
+        description="Here are the current stock prices. Prices change every minute.",
         color=discord.Color.gold()
     )
 
