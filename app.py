@@ -341,7 +341,10 @@ async def blackjack(interaction: discord.Interaction, bet: int):
         await interaction.response.send_message(f"❌ You don't have enough money! Your balance: {fmt(balance)}", ephemeral=True)
         return
 
+
+    winnings = 0
     update_balance(user_id, -bet)  # Deduct bet from balance
+    balance = get_balance(user_id)[0]  # Re-fetch updated balance
 
     await interaction.response.defer()
     user_hand = [draw_card(), draw_card()]
@@ -358,12 +361,13 @@ async def blackjack(interaction: discord.Interaction, bet: int):
     dealer_blackjack = dealer_total == 21 and len(dealer_hand) == 2
 
     if user_blackjack and not dealer_blackjack:  # **Player wins instantly**
-        winnings = bet * 2.5  # **Blackjack pays 3:2**
+        winnings = int(bet * 1.5)  # Define winnings for blackjack
         update_balance(user_id, winnings)
-        record_blackjack_stats(user_id, bet, "blackjack", bet * 1.5)
+        balance = get_balance(user_id)[0]  # Re-fetch updated balance
+        record_blackjack_stats(user_id, bet, "blackjack", winnings - bet)
 
         embed = discord.Embed(title="🎰 Blackjack 🎰", color=discord.Color.green())
-        embed.add_field(name="Your Hand 🃏", value=f"{user_cards} → **{user_total}** (🎉 **Blackjack!**)", inline=False)
+        embed.add_field(name="Your Hand 🃏", value=f"{user_cards} → **{user_total}** ( 🎉 **Blackjack!**)", inline=False)
         embed.add_field(name="Dealer's Hand 🤵", value=f"{dealer_hand[0][0]} ❓", inline=False)
         embed.set_footer(text=f"Blackjack! You win {fmt(winnings - bet)} coins! 💰")
         await interaction.followup.send(embed=embed)
@@ -372,7 +376,7 @@ async def blackjack(interaction: discord.Interaction, bet: int):
     if dealer_blackjack and not user_blackjack:  # **Dealer wins instantly**
         embed = discord.Embed(title="🎰 Blackjack 🎰", color=discord.Color.red())
         embed.add_field(name="Your Hand 🃏", value=f"{user_cards} → **{user_total}**", inline=False)
-        embed.add_field(name="Dealer's Hand 🤵", value=f"{' '.join(card[0] for card in dealer_hand)} → **{dealer_total}** (🔥 **Blackjack!**)", inline=False)
+        embed.add_field(name="Dealer's Hand 🤵", value=f"{' '.join(card[0] for card in dealer_hand)} → **{dealer_total}** ( 🔥 **Blackjack!**)", inline=False)
         embed.set_footer(text=f"Dealer got Blackjack! You lost {fmt(bet)} coins. 😭")
         record_blackjack_stats(user_id, bet, "loss", -bet)
         await interaction.followup.send(embed=embed)
@@ -462,7 +466,8 @@ async def blackjack(interaction: discord.Interaction, bet: int):
                 break
 
             await message.remove_reaction(reaction.emoji, interaction.user)
-
+            update_balance(user_id, bet)
+            balance = get_balance(user_id)[0]  # Re-fetch updated balance
         except asyncio.TimeoutError:
             update_balance(user_id, bet)
             embed.color = discord.Color.red()
